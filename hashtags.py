@@ -33,12 +33,11 @@ def reading_data_of_test_file(file_name: str) -> list or bool:
         return text
 
 
-def top_hash_tag(quantity: int = 10):
+def top_hash_tag(hash_tag_count: int = 10, word_count: int = 5):
     texts = reading_data_of_test_file('in.txt')
 
     hash_tag = [re.findall(r"#(\w+)", text.lower()) for text in texts]
-    hash_tag = Counter([text for sublist in hash_tag for text in sublist])
-    frequent_hash_tag = hash_tag.most_common(quantity)
+    frequent_hash_tag = Counter([text for sublist in hash_tag for text in sublist]).most_common(hash_tag_count)
 
     result = [key for key, value in frequent_hash_tag]  # получаем отсортированные по убыванию популярные хэштеги
     logging.info(f"Sorted by data descending: {result}")
@@ -54,11 +53,12 @@ def top_hash_tag(quantity: int = 10):
                                 ]
         top_words = Counter(
             [word for tweet_words in breakdown_into_words
-             for word in tweet_words]).most_common(5)
+             for word in tweet_words]).most_common(word_count)
 
         sorted_words = [word for word, value in top_words]
         often_used_words[top_hash_tags] = sorted_words
 
+    logging.info(often_used_words)
     return sys.stdout.write(f"{str(result)}\n{str(often_used_words)}")
 
 
