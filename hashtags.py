@@ -33,9 +33,18 @@ def reading_data_of_test_file(file_name: str) -> list or bool:
         return text
 
 
-def top_hashtag():
-    pass
+def top_hash_tag(quantity: int = 10):
+    texts = reading_data_of_test_file('in.txt')
+
+    hash_tag = [re.findall(r"#(\w+)", text.lower()) for text in texts]
+    hash_tag = Counter([text for sublist in hash_tag for text in sublist])
+    frequent_hash_tag = hash_tag.most_common(quantity)
+
+    result = [key for key, value in frequent_hash_tag]  # получаем отсортированные по убыванию популярные хэштеги
+    logging.info(f"Sorted by data descending: {result}")
+
+    print(result)
 
 
 if __name__ == "__main__":
-    print(reading_data_of_test_file('in.txt'))
+    top_hash_tag()
